@@ -40,16 +40,38 @@
          *  only be called once.)
          */
         function draw() {
-
+            //BW
             graphics.clearRect(0, 0, 600, 600);
-
-            // TODO: insert code to draw the image for Exercise 1!
-            graphics.beginPath();
-            graphics.bezierCurveTo(100, 200, 200, 100, 200, 100);
-            graphics.moveTo(4, 42);
-            graphics.bezierCurveTo(200, 300, 300, 200, 300, 400);
+            
+            // Księżyc
+            const dtr = d => d * (Math.PI / 180);
+            const arc = {
+                x: 300,
+                y: 300,
+                radius: 150,
+                d1: dtr(-95),
+                d2: dtr(165)
+            }
+            const curve = {
+                cp1: {
+                    x: arc.x + arc.radius * Math.cos(dtr(90)),
+                    y: arc.y + arc.radius * Math.sin(dtr(90))
+                },
+                cp2: {
+                    x: arc.x + arc.radius * Math.cos(dtr(-25)),
+                    y: arc.y + arc.radius * Math.sin(dtr(-25))
+                },
+                ep: {
+                    x: arc.x + arc.radius * Math.cos(dtr(-95)),
+                    y: arc.y + arc.radius * Math.sin(dtr(-95))
+                }
+            }
+            graphics.arc(arc.x, arc.y, arc.radius, arc.d1, arc.d2);
+            graphics.bezierCurveTo(curve.cp1.x, curve.cp1.y, curve.cp2.x, curve.cp2.y, curve.ep.x, curve.ep.y);
+            graphics.fillStyle = 'yellow';
+            graphics.fill();
             graphics.stroke();
-
+            graphics.closePath();
         } // end of draw()
 
 
