@@ -40,31 +40,33 @@
          *  only be called once.)
          */
         function draw() {
-            //BW
+            //// BW
             graphics.clearRect(0, 0, 600, 600);
-            
-            // Księżyc
+            //// Utils
+            // Degrees to radians function
             const dtr = d => d * (Math.PI / 180);
+            // Coords from circle radius (with radius scaling)
+            const cfr = (arc, degree, scale = 1) => {
+                const {x, y, radius} = arc;
+                return {
+                    x: x + radius * scale * Math.cos(dtr(degree)),
+                    y: y + radius * scale * Math.sin(dtr(degree))
+                }
+            }
+            
+            //// Drawing
+            // Moon shape
             const arc = {
                 x: 300,
                 y: 300,
-                radius: 150,
-                d1: dtr(-95),
-                d2: dtr(165)
+                radius: 200,
+                d1: dtr(-95), // Arc start
+                d2: dtr(165) // Arc end
             }
             const curve = {
-                cp1: {
-                    x: arc.x + arc.radius * Math.cos(dtr(90)),
-                    y: arc.y + arc.radius * Math.sin(dtr(90))
-                },
-                cp2: {
-                    x: arc.x + arc.radius * Math.cos(dtr(-25)),
-                    y: arc.y + arc.radius * Math.sin(dtr(-25))
-                },
-                ep: {
-                    x: arc.x + arc.radius * Math.cos(dtr(-95)),
-                    y: arc.y + arc.radius * Math.sin(dtr(-95))
-                }
+                cp1: cfr(arc, 90), // Curve point 1
+                cp2: cfr(arc, -25), // Curve point 2
+                ep: cfr(arc, -95) // End point
             }
             graphics.arc(arc.x, arc.y, arc.radius, arc.d1, arc.d2);
             graphics.bezierCurveTo(curve.cp1.x, curve.cp1.y, curve.cp2.x, curve.cp2.y, curve.ep.x, curve.ep.y);
@@ -72,6 +74,31 @@
             graphics.fill();
             graphics.stroke();
             graphics.closePath();
+            // Eyes
+            [0.42, 0.84].forEach(radiusScale => { //Eye positions based on radius * scale
+                graphics.fillStyle = 'white';
+                const eye = cfr(arc, 6, radiusScale);
+                const r = arc.radius * 0.08;
+                graphics.fillCircle(eye.x, eye.y, r);
+                graphics.fillStyle = 'black';
+                graphics.fillCircle(eye.x, eye.y, r * 0.4)
+            })
+            // Smile
+            const lips = { // Lips path
+                lp: cfr(arc, 70, 0.4), // left
+                rp: cfr(arc, 35, 0.9), // right
+                bcp: cfr(arc, 74, 0.92), // bottom lip curve point
+                tcp: cfr(arc, 58, 0.69) // upper lip curve point
+            }
+            graphics.fillStyle = 'black';
+            graphics.beginPath();
+            graphics.moveTo(lips.lp.x, lips.lp.y);
+            graphics.quadraticCurveTo(lips.bcp.x, lips.bcp.y, lips.rp.x, lips.rp.y);
+            graphics.quadraticCurveTo(lips.tcp.x, lips.tcp.y, lips.lp.x, lips.lp.y);
+            graphics.fill();
+            graphics.closePath();
+            // Teeth
+            
         } // end of draw()
 
 
