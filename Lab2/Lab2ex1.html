@@ -59,7 +59,7 @@
             const arc = {
                 x: 300,
                 y: 300,
-                radius: 200,
+                radius: 250,
                 d1: dtr(-95), // Arc start
                 d2: dtr(165) // Arc end
             }
@@ -72,16 +72,17 @@
             graphics.bezierCurveTo(curve.cp1.x, curve.cp1.y, curve.cp2.x, curve.cp2.y, curve.ep.x, curve.ep.y);
             graphics.fillStyle = 'yellow';
             graphics.fill();
+            graphics.lineWidth = 2;
             graphics.stroke();
             graphics.closePath();
             // Eyes
             [0.42, 0.84].forEach(radiusScale => { //Eye positions based on radius * scale
                 graphics.fillStyle = 'white';
                 const eye = cfr(arc, 6, radiusScale);
-                const r = arc.radius * 0.08;
+                const r = arc.radius * 0.07;
                 graphics.fillCircle(eye.x, eye.y, r);
                 graphics.fillStyle = 'black';
-                graphics.fillCircle(eye.x, eye.y, r * 0.4)
+                graphics.fillCircle(eye.x, eye.y, r * 0.45)
             })
             // Smile
             const lips = { // Lips path
@@ -98,6 +99,54 @@
             graphics.fill();
             graphics.closePath();
             // Teeth
+            const teeth = [
+                [ // 1
+                    cfr(arc, 54.7, 0.62),
+                    cfr(arc, 51.2, 0.67),
+                    cfr(arc, 56.8, 0.71),
+                    cfr(arc, 60.5, 0.66)
+                ],
+                [ // 2
+                    cfr(arc, 50.4, 0.68),
+                    cfr(arc, 47, 0.73),
+                    cfr(arc, 52.3, 0.765),
+                    cfr(arc, 55.8, 0.72)
+                ]
+            ]
+            graphics.fillStyle = 'white';
+            for(let i = 0; i < 2; i++) {
+                const t = teeth[i];
+                graphics.beginPath();
+                graphics.moveTo(t[0].x, t[0].y);
+                for(let j = 1; j < t.length; j++) {
+                    graphics.lineTo(t[j].x, t[j].y);
+                }
+                graphics.lineTo(t[0].x, t[0].y);
+                graphics.fill();
+                graphics.closePath();
+            }
+            // Smile
+            const smile = [
+                { // left corner
+                    p1: cfr(arc, 64, 0.38),
+                    p2: cfr(arc, 75, 0.4),
+                    cp: cfr(arc, 68, 0.42)
+                },
+                { // right corner
+                    p1: cfr(arc, 32, 0.88),
+                    p2: cfr(arc, 35, 0.945),
+                    cp: cfr(arc, 36.5, 0.88)
+                }
+            ];
+            graphics.strokeStyle = 'black';
+            graphics.lineWidth = arc.radius / 100;
+            smile.forEach(obj => {
+                graphics.beginPath();
+                graphics.moveTo(obj.p1.x, obj.p1.y);
+                graphics.quadraticCurveTo(obj.cp.x, obj.cp.y, obj.p2.x, obj.p2.y);
+                graphics.stroke();
+                graphics.closePath();
+            });
             
         } // end of draw()
 
