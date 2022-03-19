@@ -55,7 +55,7 @@
             var b = Math.floor(256 * Math.random());
             return "rgb(" + r + "," + g + "," + b + ")";
         }
-
+        
         /**
          * This function is called in init() to set up mouse event handling
          * on the canvas.  You can modify the nested functions doMouseDown,
@@ -68,7 +68,9 @@
             var startX, startY;    // coordinates of mouse at start of drag.
             var prevX, prevY;      // previous mouse position during a drag.
 
-            var colorChoice;  // Integer code for the selected color in the "colorChoide"
+            var colorChoice;
+            // BW
+            let toolChoice;  // Integer code for the selected color in the "colorChoide"
             // popup menu.  The value is assigned in doMouseDown.
 
             function doMouseDown(evt) {
@@ -92,6 +94,8 @@
                     document.addEventListener("mouseup", doMouseUp, false);
                 }
                 colorChoice = Number(document.getElementById("colorChoice").value);
+                toolChoice = Number(document.getElementById("toolChoice").value);
+                
                 // TODO: Anything else to do when mouse is first pressed?
             }
 
@@ -104,6 +108,30 @@
                 var r = canvas.getBoundingClientRect();
                 x = Math.round(evt.clientX - r.left);
                 y = Math.round(evt.clientY - r.top);
+
+                graphics.fillStyle = 'red';
+                const drawCustomShape = (ox, oy, corners, radius) => {
+                    let points = [];
+                    for(let i = 1; i <= corners; i++) {
+                        let x = ox + radius * Math.sin((Math.PI / (corners / 2)) * i); 
+                        let y = oy + radius * Math.cos((Math.PI / (corners / 2)) * i);
+                        points[i - 1] = {x, y};
+                    }
+                    graphics.beginPath();
+                    graphics.moveTo(points[0].x, points[0].y);
+                    for(let i = 1; i < points.length; i++) {
+                        graphics.lineTo(points[i].x, points[i].y);
+                    }
+                    graphics.lineTo(points[0].x, points[0].y);
+                    graphics.fill();
+                    graphics.stroke();
+                    graphics.closePath();
+                }
+
+                const drawRect = (ox, oy) => {
+                    graphics.fillRect(ox - 20, oy - 20, 40, 40);
+                    graphics.strokeRect(ox - 20, oy - 20, 40, 40);
+                }
 
                 /*------------------------------------------------------------*/
                 /* TODO: Add support for more drawing tools. */
@@ -128,8 +156,12 @@
                 else if (colorChoice == 4) {
                     graphics.fillStyle = "black";
                 }
-                graphics.fillRect(x - 20, y - 20, 40, 40);
-                graphics.strokeRect(x - 20, y - 20, 40, 40);
+
+                if(toolChoice == 0) {
+                    drawRect(x, y);
+                } else if(toolChoice == 1) {
+                    drawCustomShape(x, y, 12, 30);
+                }
 
                 /*------------------------------------------------------------*/
 
@@ -271,7 +303,8 @@
         <p>JavaScript is required to use this page.</p>
     </noscript>
 
-    <p><b>Color:</b>
+    <p>
+        <b>Color:</b>
         <select id="colorChoice">
             <option value="0">Random</option>
             <option value="1">Red</option>
@@ -281,6 +314,11 @@
             <option value="4">Black</option>
         </select>
         <!-- BW -->
+        <b>Tool:</b>
+        <select id="toolChoice">
+            <option value="0">Rectangle</option>
+            <option value="1">Custom</option>
+        </select>
         <button onclick="graphics.clearRect(0, 0, canvas.width, canvas.height)">
             Clear canvas
         </button>
