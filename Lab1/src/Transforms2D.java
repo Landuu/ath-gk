@@ -57,7 +57,6 @@ public class Transforms2D extends JPanel {
             } else {
                 g2.drawImage(pic, -200, -150, null);
             }
-
         }
     }
 

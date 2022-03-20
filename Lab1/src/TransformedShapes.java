@@ -54,7 +54,6 @@ public class TransformedShapes extends JPanel {
         int sy = 150;
         int w = 300;
         int h = 12;
-
         g2.setColor(Color.RED);
 
         // Top arm
@@ -72,55 +71,6 @@ public class TransformedShapes extends JPanel {
         g2.translate(w, 0);
         g2.rotate(Math.toRadians(135), 0, h/2);
         g2.fillRect(0,0, (int) connectorWidth, h);
-
-
-
-
-
-
-
-
-//        // TODO Draw the required image, using ONLY the four methods defined above,
-//        // along with g2.setColor, g1.scale, g2.translate, and g2.rotate.
-//
-//        /* ----------------------------------------------------------------------- */
-//
-//        // REMOVE THE FOLLOWING CODE, which draws a big red X in the upper right quadrant,
-//        // and insert your own code to draw the required pictures in the four quadrants.
-//
-//        // The next two line scale the X to be twice the original size
-//        // and then moves the center of the X from (0,0) to (450,150).
-//
-//        g2.translate(450,150);
-//        g2.scale(2,2);
-//
-//        // Set the drawing color to red.
-//
-//        g2.setColor(Color.RED);
-//
-//        // The next three lines draw a tilted rectangle centered at (0,0).
-//
-//        g2.rotate(Math.PI/4);
-//        g2.scale(1,0.25);
-//        square();
-//
-//        // The next two lines undo the previous scale and rotation.  (Can't use resetTransform()
-//        // here because that would also eliminate the first translate and scale.)
-//
-//        g2.scale(1,4);
-//        g2.rotate(-Math.PI/4);
-//
-//        // The next three lines draw a rectangle tilted in the opposite direction.
-//
-//        g2.rotate(-Math.PI/4);
-//        g2.scale(1,0.25);
-//        square();
-//
-//        // reset the transform, so changes don't apply to subsequent drawing
-//
-//        resetTransform();
-//
-//        /* ----------------------------------------------------------------------- */
 
     } // end paintComponent()
 
