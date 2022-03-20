@@ -94,6 +94,7 @@
                     document.addEventListener("mouseup", doMouseUp, false);
                 }
                 colorChoice = Number(document.getElementById("colorChoice").value);
+                // Added code
                 toolChoice = Number(document.getElementById("toolChoice").value);
                 
                 // TODO: Anything else to do when mouse is first pressed?
@@ -110,6 +111,12 @@
                 y = Math.round(evt.clientY - r.top);
 
                 graphics.fillStyle = 'red';
+
+                const drawRect = (ox, oy) => {
+                    graphics.fillRect(ox - 20, oy - 20, 40, 40);
+                    graphics.strokeRect(ox - 20, oy - 20, 40, 40);
+                }
+
                 const drawCustomShape = (ox, oy, corners, radius) => {
                     let points = [];
                     for(let i = 1; i <= corners; i++) {
@@ -126,11 +133,6 @@
                     graphics.fill();
                     graphics.stroke();
                     graphics.closePath();
-                }
-
-                const drawRect = (ox, oy) => {
-                    graphics.fillRect(ox - 20, oy - 20, 40, 40);
-                    graphics.strokeRect(ox - 20, oy - 20, 40, 40);
                 }
 
                 /*------------------------------------------------------------*/
@@ -152,7 +154,7 @@
                 else if (colorChoice == 3) {
                     graphics.fillStyle = "blue";
                 }
-                //BW
+                // Added code
                 else if (colorChoice == 4) {
                     graphics.fillStyle = "black";
                 }
@@ -310,10 +312,9 @@
             <option value="1">Red</option>
             <option value="2">Green</option>
             <option value="3">Blue</option>
-            <!-- //BW -->
+            <!-- Added code -->
             <option value="4">Black</option>
         </select>
-        <!-- BW -->
         <b>Tool:</b>
         <select id="toolChoice">
             <option value="0">Rectangle</option>
