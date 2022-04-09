@@ -45,14 +45,89 @@ public class SceneGraph extends JPanel {
 	/**
 	 *  Builds the data structure that represents the entire picture. 
 	 */
+	private static SceneGraphNode polygon = new SceneGraphNode() {
+		void doDraw(Graphics2D g) {  // width = 1, height = 1, center of base is at (0,0);
+			/*
+			double corners = 12;
+                int radius = 150;
+                Polygon p = new Polygon();
+                for (int i = 1; i <= corners; i++) {
+                    double x = radius * Math.sin(Math.PI / (corners / 2) * i);
+                    double y = radius * Math.cos(Math.PI / (corners / 2) * i);
+                    p.addPoint((int) x, (int) y);
+                }
+                g2.fill(p);
+			 */
+//			Path2D path = new Path2D.Double();
+//			path.moveTo(-0.5,0);
+//			path.lineTo(0.5,0);
+//			path.lineTo(0,1);
+//			path.closePath();
+//			g.fill(path);
+			Path2D path = new Path2D.Double();
+			double corners = 12;
+			int radius = 1;
+			path.moveTo(0, 0);
+			for (int i = 0; i <= corners; i++) {
+				double x = radius * Math.sin(Math.PI / (corners / 2) * i);
+				double y = radius * Math.cos(Math.PI / (corners / 2) * i);
+				path.lineTo(x, y);
+			}
+			path.closePath();
+			g.draw(path);
+		}
+	};
+
+	private void drawObject(CompoundObject world, double moveX, double moveY, double scaleModifier) {
+		TransformedObject t = new TransformedObject(filledTriangle);
+		TransformedObject r = new TransformedObject(filledRect);
+
+		// Triangle base
+		double tScaleX = 0.6 * scaleModifier;
+		double tScaleY = 2 * scaleModifier;
+
+		t.setTranslation(moveX, moveY);
+		t.setScale(tScaleX, tScaleY);
+
+		// Rectangle connector
+		double rScaleX = 3 * scaleModifier;
+		double rScaleY = 0.2 * scaleModifier;
+		double rOffsetY = tScaleY + moveY;
+
+		r.setTranslation(moveX, rOffsetY);
+		r.setScale(rScaleX, rScaleY);
+		r.setRotation(335);
+
+		// Ending 1
+		TransformedObject p = new TransformedObject(polygon);
+		double rad = Math.toRadians(335);
+		double pOffsetX = rScaleX * Math.sin(rad);
+		double pOffsetY = rScaleY * Math.cos(rad);
+		p.setTranslation(moveX + pOffsetX, rOffsetY + pOffsetY);
+
+		world.add(t);
+		world.add(r);
+		world.add(p);
+	}
+
 	private void createWorld() {
 
 		world = new CompoundObject();  // Root node for the scene graph.
 
 		// TODO: Create objects and add them to the scene graph.
-		rotatingRect = new TransformedObject(filledRect);   // (DELETE THIS EXAMPLE)
-		rotatingRect.setScale(2,2).setColor(Color.RED); 
-		world.add(rotatingRect);
+//		rotatingRect = new TransformedObject(filledRect);   // (DELETE THIS EXAMPLE)
+//		rotatingRect.setScale(2,2).setColor(Color.RED);
+//		world.add(rotatingRect);
+
+		drawObject(world, 0, -1, 1);
+		drawObject(world, 2, -2, .5);
+
+
+
+
+
+
+
 
 	} // end createWorld()
 
