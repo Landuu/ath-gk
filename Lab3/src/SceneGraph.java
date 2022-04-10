@@ -15,7 +15,7 @@ public class SceneGraph extends JPanel {
 		JFrame window = new JFrame("Scene Graph 2D");
 		window.setContentPane( new SceneGraph() );
 		window.pack();
-		window.setLocation(100,60);
+		window.setLocation(2100,60);
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -40,40 +40,33 @@ public class SceneGraph extends JPanel {
 	private CompoundObject world; // SceneGraphNode representing the entire scene.
 
 	// TODO: Define global variables to represent animated objects in the scene.
-	private TransformedObject rotatingRect;  // (DELETE THIS EXAMPLE)
+	private ArrayList<TransformedObject> spinners = new ArrayList<>();
 
 	/**
 	 *  Builds the data structure that represents the entire picture. 
 	 */
 	private static SceneGraphNode polygon = new SceneGraphNode() {
-		void doDraw(Graphics2D g) {  // width = 1, height = 1, center of base is at (0,0);
-			/*
-			double corners = 12;
-                int radius = 150;
-                Polygon p = new Polygon();
-                for (int i = 1; i <= corners; i++) {
-                    double x = radius * Math.sin(Math.PI / (corners / 2) * i);
-                    double y = radius * Math.cos(Math.PI / (corners / 2) * i);
-                    p.addPoint((int) x, (int) y);
-                }
-                g2.fill(p);
-			 */
-//			Path2D path = new Path2D.Double();
-//			path.moveTo(-0.5,0);
-//			path.lineTo(0.5,0);
-//			path.lineTo(0,1);
-//			path.closePath();
-//			g.fill(path);
+		void doDraw(Graphics2D g) {
 			Path2D path = new Path2D.Double();
 			double corners = 12;
-			int radius = 1;
+			double radius = 1;
 			path.moveTo(0, 0);
-			for (int i = 0; i <= corners; i++) {
-				double x = radius * Math.sin(Math.PI / (corners / 2) * i);
-				double y = radius * Math.cos(Math.PI / (corners / 2) * i);
-				path.lineTo(x, y);
+			double[][] points = new double[(int) corners][2];
+			for (int i = 0; i < corners; i++) {
+				points[i][0] = radius * Math.sin(Math.PI / (corners / 2) * i);
+				points[i][1] = radius * Math.cos(Math.PI / (corners / 2) * i);
 			}
+			for (int i = 0; i < points.length -1; i++) {
+				path.lineTo(points[i][0], points[i][1]);
+				path.lineTo(points[i + 1][0], points[i + 1][1]);
+				path.moveTo(0,0);
+			}
+			int lastIndex = points.length - 1;
+			path.lineTo(points[lastIndex][0], points[lastIndex][1]);
+			path.lineTo(points[0][0], points[0][1]);
+			path.moveTo(0, 0);
 			path.closePath();
+			g.setStroke(new BasicStroke(0.02f));
 			g.draw(path);
 		}
 	};
@@ -81,6 +74,8 @@ public class SceneGraph extends JPanel {
 	private void drawObject(CompoundObject world, double moveX, double moveY, double scaleModifier) {
 		TransformedObject t = new TransformedObject(filledTriangle);
 		TransformedObject r = new TransformedObject(filledRect);
+		TransformedObject spinner1 = new TransformedObject(polygon);
+		TransformedObject spinner2 = new TransformedObject(polygon);
 
 		// Triangle base
 		double tScaleX = 0.6 * scaleModifier;
@@ -93,21 +88,33 @@ public class SceneGraph extends JPanel {
 		double rScaleX = 3 * scaleModifier;
 		double rScaleY = 0.2 * scaleModifier;
 		double rOffsetY = tScaleY + moveY;
+		int rRotation = 10;
 
 		r.setTranslation(moveX, rOffsetY);
 		r.setScale(rScaleX, rScaleY);
-		r.setRotation(335);
+		r.setRotation(rRotation);
 
-		// Ending 1
-		TransformedObject p = new TransformedObject(polygon);
-		double rad = Math.toRadians(335);
-		double pOffsetX = rScaleX * Math.sin(rad);
-		double pOffsetY = rScaleY * Math.cos(rad);
-		p.setTranslation(moveX + pOffsetX, rOffsetY + pOffsetY);
+		// Spinner 1
+		double rad = Math.toRadians(180 + rRotation);
+		double pOffsetX = moveX + rScaleX / 2 * Math.cos(rad);
+		double pOffsetY = moveY + tScaleY + rScaleX / 2 * Math.sin(rad);
+		spinner1.setTranslation(pOffsetX, pOffsetY);
+		spinner1.setScale(0.8 * scaleModifier, 0.8 * scaleModifier);
+
+		// Spinner 2
+		double rad2 = Math.toRadians(rRotation);
+		double pOffsetX2 = moveX + rScaleX / 2 * Math.cos(rad2);
+		double pOffsetY2 = moveY + tScaleY + rScaleX / 2 * Math.sin(rad2);
+		spinner2.setTranslation(pOffsetX2, pOffsetY2);
+		spinner2.setScale(0.8 * scaleModifier, 0.8 * scaleModifier);
 
 		world.add(t);
 		world.add(r);
-		world.add(p);
+		world.add(spinner1);
+		world.add(spinner2);
+
+		spinners.add(spinner1);
+		spinners.add(spinner2);
 	}
 
 	private void createWorld() {
@@ -119,7 +126,7 @@ public class SceneGraph extends JPanel {
 //		rotatingRect.setScale(2,2).setColor(Color.RED);
 //		world.add(rotatingRect);
 
-		drawObject(world, 0, -1, 1);
+		drawObject(world, 0, -1, .8);
 		drawObject(world, 2, -2, .5);
 
 
@@ -140,7 +147,10 @@ public class SceneGraph extends JPanel {
 		frameNumber++;
 
 		// TODO: Update state in preparation for drawing the next frame.
-		rotatingRect.setRotation(frameNumber*0.75); // (DELETE THIS EXAMPLE)
+
+		for (TransformedObject s : spinners) {
+			s.setRotation(frameNumber*0.75);
+		}
 
 	}
 
