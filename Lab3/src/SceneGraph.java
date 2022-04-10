@@ -15,7 +15,7 @@ public class SceneGraph extends JPanel {
 		JFrame window = new JFrame("Scene Graph 2D");
 		window.setContentPane( new SceneGraph() );
 		window.pack();
-		window.setLocation(2100,60);
+		window.setLocation(100,60);
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -71,7 +71,7 @@ public class SceneGraph extends JPanel {
 		}
 	};
 
-	private void drawObject(CompoundObject world, double moveX, double moveY, double scaleModifier) {
+	private void drawObject(CompoundObject world, double moveX, double moveY, double scaleModifier, Color color) {
 		TransformedObject t = new TransformedObject(filledTriangle);
 		TransformedObject r = new TransformedObject(filledRect);
 		TransformedObject spinner1 = new TransformedObject(polygon);
@@ -83,16 +83,21 @@ public class SceneGraph extends JPanel {
 
 		t.setTranslation(moveX, moveY);
 		t.setScale(tScaleX, tScaleY);
+		t.setColor(color);
 
 		// Rectangle connector
 		double rScaleX = 3 * scaleModifier;
 		double rScaleY = 0.2 * scaleModifier;
 		double rOffsetY = tScaleY + moveY;
-		int rRotation = 10;
+		int rRotation = -15;
 
 		r.setTranslation(moveX, rOffsetY);
 		r.setScale(rScaleX, rScaleY);
 		r.setRotation(rRotation);
+		r.setColor(Color.RED);
+
+		// Spinner distance correction
+		rScaleX *= 0.95;
 
 		// Spinner 1
 		double rad = Math.toRadians(180 + rRotation);
@@ -109,9 +114,9 @@ public class SceneGraph extends JPanel {
 		spinner2.setScale(0.8 * scaleModifier, 0.8 * scaleModifier);
 
 		world.add(t);
-		world.add(r);
 		world.add(spinner1);
 		world.add(spinner2);
+		world.add(r);
 
 		spinners.add(spinner1);
 		spinners.add(spinner2);
@@ -126,15 +131,9 @@ public class SceneGraph extends JPanel {
 //		rotatingRect.setScale(2,2).setColor(Color.RED);
 //		world.add(rotatingRect);
 
-		drawObject(world, 0, -1, .8);
-		drawObject(world, 2, -2, .5);
-
-
-
-
-
-
-
+		drawObject(world, -2.2, 0.5, 0.75, new Color(160,50, 210));
+		drawObject(world, 0.5, -2.7, 1, new Color(40, 60, 170));
+		drawObject(world, 2.6, 1.3, 0.5, new Color(60, 150, 35));
 
 	} // end createWorld()
 
