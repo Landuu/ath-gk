@@ -80,7 +80,6 @@ public class SceneGraph extends JPanel {
 		// Triangle base
 		double tScaleX = 0.6 * scaleModifier;
 		double tScaleY = 2 * scaleModifier;
-
 		t.setTranslation(moveX, moveY);
 		t.setScale(tScaleX, tScaleY);
 		t.setColor(color);
@@ -90,28 +89,27 @@ public class SceneGraph extends JPanel {
 		double rScaleY = 0.2 * scaleModifier;
 		double rOffsetY = tScaleY + moveY;
 		int rRotation = -15;
-
 		r.setTranslation(moveX, rOffsetY);
 		r.setScale(rScaleX, rScaleY);
 		r.setRotation(rRotation);
 		r.setColor(Color.RED);
 
 		// Spinner distance correction
-		rScaleX *= 0.95;
+		double sRadius = rScaleX * 0.95;
 
 		// Spinner 1
 		double rad = Math.toRadians(180 + rRotation);
-		double pOffsetX = moveX + rScaleX / 2 * Math.cos(rad);
-		double pOffsetY = moveY + tScaleY + rScaleX / 2 * Math.sin(rad);
+		double pOffsetX = moveX + sRadius / 2 * Math.cos(rad);
+		double pOffsetY = moveY + tScaleY + sRadius / 2 * Math.sin(rad);
 		spinner1.setTranslation(pOffsetX, pOffsetY);
 		spinner1.setScale(0.8 * scaleModifier, 0.8 * scaleModifier);
 
 		// Spinner 2
 		double rad2 = Math.toRadians(rRotation);
-		double pOffsetX2 = moveX + rScaleX / 2 * Math.cos(rad2);
-		double pOffsetY2 = moveY + tScaleY + rScaleX / 2 * Math.sin(rad2);
+		double pOffsetX2 = moveX + sRadius / 2 * Math.cos(rad2);
+		double pOffsetY2 = moveY + tScaleY + sRadius / 2 * Math.sin(rad2);
 		spinner2.setTranslation(pOffsetX2, pOffsetY2);
-		spinner2.setScale(0.8 * scaleModifier, 0.8 * scaleModifier);
+		spinner2.setScale(0.75 * scaleModifier, 0.75 * scaleModifier);
 
 		world.add(t);
 		world.add(spinner1);
