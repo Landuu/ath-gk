@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.geom.*;
-import java.util.ArrayList;
 
 /**
  * A panel that displays a two-dimensional animation that is drawn
@@ -15,7 +14,7 @@ public class SubroutineHierarchy extends JPanel {
 		JFrame window = new JFrame("Subroutine Hierarchy");
 		window.setContentPane( new SubroutineHierarchy() );
 		window.pack();
-		window.setLocation(100,60);
+		window.setLocation(2000,60);
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -46,8 +45,9 @@ public class SubroutineHierarchy extends JPanel {
 	private void drawWorld(Graphics2D g2) {
 
 		// TODO: Draw the content of the scene.
-		rotatingRect(g2);  // (DELETE THIS EXAMPLE)
-
+		drawObject(g2, -2.2, 0.5, 0.75, new Color(160,50, 210));
+		drawObject(g2, 0.5, -2.7, 1, new Color(40, 60, 170));
+		drawObject(g2, 2.6, 1.3, 0.5, new Color(60, 150, 35));
 	} // end drawWorld()
 	
 	
@@ -61,16 +61,60 @@ public class SubroutineHierarchy extends JPanel {
 
     
 	// TODO: Define methods for drawing objects in the scene.
-	
-	private void rotatingRect(Graphics2D g2) { // (DELETE THIS EXAMPLE)
-		AffineTransform saveTransform = g2.getTransform();  // (It might be necessary to save/restore transform and color)
-		Color saveColor = g2.getColor();
-		g2.setColor( Color.RED );
+	private void drawObject(Graphics2D g2, double moveX, double moveY, double scaleModifier, Color color) {
+		AffineTransform baseTransform = g2.getTransform();
+		Color baseColor = g2.getColor();
+
+		// Triangle base
+		double tScaleX = 0.6 * scaleModifier;
+		double tScaleY = 2 * scaleModifier;
+		g2.translate(moveX, moveY);
+		g2.scale(tScaleX, tScaleY);
+		g2.setColor(color);
+		filledTriangle(g2);
+
+		// Rectangle connector (values)
+		double rScaleX = 3 * scaleModifier;
+		double rScaleY = 0.2 * scaleModifier;
+		double rOffsetY = tScaleY + moveY;
+		double rRotation = -15;
+		double rRotationR = Math.toRadians(rRotation);
+
+		// Spinner distance correction
+		double sRadius = rScaleX * 0.95;
+
+		// Spinner 1
+		g2.setTransform(baseTransform);
+		double rad = Math.toRadians(180 + rRotation);
+		double pOffsetX = moveX + sRadius / 2 * Math.cos(rad);
+		double pOffsetY = moveY + tScaleY + sRadius / 2 * Math.sin(rad);
+		g2.setColor(Color.DARK_GRAY);
+		g2.translate(pOffsetX, pOffsetY);
+		g2.scale(0.75 * scaleModifier, 0.75 * scaleModifier);
 		g2.rotate( Math.toRadians( frameNumber*0.75 ));
-		g2.scale( 2, 2 );
+		polygon(g2);
+
+		// Spinner 2
+		g2.setTransform(baseTransform);
+		double pOffsetX2 = moveX + sRadius / 2 * Math.cos(rRotationR);
+		double pOffsetY2 = moveY + tScaleY + sRadius / 2 * Math.sin(rRotationR);
+		g2.setColor(Color.DARK_GRAY);
+		g2.translate(pOffsetX2, pOffsetY2);
+		g2.scale(0.75 * scaleModifier, 0.75 * scaleModifier);
+		g2.rotate( Math.toRadians( frameNumber*0.75 ));
+		polygon(g2);
+
+		// Rectangle connector
+		g2.setTransform(baseTransform);
+		g2.setColor(baseColor);
+		g2.translate(moveX, rOffsetY);
+		g2.rotate(rRotationR, 0,0);
+		g2.scale(rScaleX, rScaleY);
+		g2.setColor(Color.RED);
 		filledRect(g2);
-		g2.setColor(saveColor);
-		g2.setTransform(saveTransform);
+
+		g2.setColor(baseColor);
+		g2.setTransform(baseTransform);
 	}
 
 
@@ -103,6 +147,32 @@ public class SubroutineHierarchy extends JPanel {
 		path.lineTo(0,1);
 		path.closePath();
 		g2.fill(path);
+	}
+
+	private static void polygon(Graphics2D g2) {
+		Path2D path = new Path2D.Double();
+		Stroke baseStroke = g2.getStroke();
+		double corners = 12;
+		double radius = 1;
+		path.moveTo(0, 0);
+		double[][] points = new double[(int) corners][2];
+		for (int i = 0; i < corners; i++) {
+			points[i][0] = radius * Math.sin(Math.PI / (corners / 2) * i);
+			points[i][1] = radius * Math.cos(Math.PI / (corners / 2) * i);
+		}
+		for (int i = 0; i < points.length -1; i++) {
+			path.lineTo(points[i][0], points[i][1]);
+			path.lineTo(points[i + 1][0], points[i + 1][1]);
+			path.moveTo(0,0);
+		}
+		int lastIndex = points.length - 1;
+		path.lineTo(points[lastIndex][0], points[lastIndex][1]);
+		path.lineTo(points[0][0], points[0][1]);
+		path.moveTo(0, 0);
+		path.closePath();
+		g2.setStroke(new BasicStroke(0.02f));
+		g2.draw(path);
+		g2.setStroke(baseStroke);
 	}
 
 
