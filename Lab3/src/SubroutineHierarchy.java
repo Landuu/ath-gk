@@ -14,7 +14,7 @@ public class SubroutineHierarchy extends JPanel {
 		JFrame window = new JFrame("Subroutine Hierarchy");
 		window.setContentPane( new SubroutineHierarchy() );
 		window.pack();
-		window.setLocation(2000,60);
+		window.setLocation(100,60);
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
