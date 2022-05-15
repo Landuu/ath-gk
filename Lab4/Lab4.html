@@ -13,24 +13,28 @@
         height="600" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid" style="background: #eeeeee">
         <defs>
             <g id="object">
-                
-                <path id="p1" fill="transparent" stroke="black">
-                    <animateTransform attributeName="transform" type="rotate" from = "0 160 358" to = "360 160 358" dur="10s" repeatCount="indefinite" /> 
+                <path id="p1"
+                    d="M 160 428 L 195 418.62177826 L 160 358M 195 418.62177826 L 220.62177826 393 L 160 358M 220.62177826 393 L 230 358 L 160 358M 230 358 L 220.62177826 323 L 160 358M 220.62177826 323 L 195 297.37822174 L 160 358M 195 297.37822174 L 160 288 L 160 358M 160 288 L 125 297.37822174 L 160 358M 125 297.37822174 L 99.37822174 323 L 160 358M 99.37822174 323 L 90 358 L 160 358M 90 358 L 99.37822174 393 L 160 358M 99.37822174 393 L 125 418.62177826 L 160 358M 125 418.62177826 L 160 428 L 160 358"
+                    fill="transparent" stroke="black">
+                    <animateTransform attributeName="transform" type="rotate" from="0 160 358" to="360 160 358"
+                        dur="10s" repeatCount="indefinite" />
                 </path>
-
-                <path id="p2" fill="transparent" stroke="black">
-                    <animateTransform attributeName="transform" type="rotate" from = "0 442 434" to = "360 442 434" dur="10s" repeatCount="indefinite" /> 
+                <path id="p2"
+                    d="M 442 504 L 477 494.62177826 L 442 434M 477 494.62177826 L 502.62177826 469 L 442 434M 502.62177826 469 L 512 434 L 442 434M 512 434 L 502.62177826 399 L 442 434M 502.62177826 399 L 477 373.37822174 L 442 434M 477 373.37822174 L 442 364 L 442 434M 442 364 L 407 373.37822174 L 442 434M 407 373.37822174 L 381.37822174 399 L 442 434M 381.37822174 399 L 372 434 L 442 434M 372 434 L 381.37822174 469 L 442 434M 381.37822174 469 L 407 494.62177826 L 442 434M 407 494.62177826 L 442 504 L 442 434"
+                    fill="transparent" stroke="black">
+                    <animateTransform attributeName="transform" type="rotate" from="0 442 434" to="360 442 434"
+                        dur="10s" repeatCount="indefinite" />
                 </path>
                 <rect x="120" y="390" width="320" height="25" transform="translate(135, -65) rotate(15)" fill="red" />
                 <polygon points="270,600 300,400 330, 600" />
             </g>
-            
+
         </defs>
-        
-        <use xlink:href="#object" fill="blue" transform="translate(40, 0)"/>
+
+        <use xlink:href="#object" fill="blue" transform="translate(40, 0)" />
         <use xlink:href="#object" fill="purple" transform="translate(-56, -145) scale(0.7, 0.7)" />
         <use xlink:href="#object" fill="green" transform="translate(335, -130) scale(0.5, 0.5)" />
-        
+
         </defs>
     </svg>
 
@@ -50,7 +54,7 @@
         }
         return points;
     }
-    
+
     const getPathString = (points, center) => {
         let pathString = "";
         for (let i = 0; i < points.length - 1; i++) {
@@ -79,9 +83,9 @@
     const points2 = getPathPoints(corners, radius, center2);
     const path1 = getPathString(points1, center1);
     const path2 = getPathString(points2, center2);
-    
-    document.getElementById("p1").setAttribute("d", path1);
-    document.getElementById("p2").setAttribute("d", path2);
+
+    // document.getElementById("p1").setAttribute("d", path1);
+    // document.getElementById("p2").setAttribute("d", path2);
 
     console.log("path1", path1);
     console.log("path2", path2);
