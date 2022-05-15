@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Lab4 - Grafika komputerowa</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600"
+        height="600" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid" style="background: #eeeeee">
+        <defs>
+            <g id="object">
+                <rect x="120" y="390" width="360" height="25" transform="translate(-100, 90) rotate(-15)" fill="red" />
+                <polygon points="270,600 300,400 330, 600" fill="purple" />
+                <path d="M 0 50 L 25 43.30127019 L 0 0M 25 43.30127019 L 43.30127019 25 L 0 0M 43.30127019 25 L 50 0 L 0 0M 50 0 L 43.30127019 -25 L 0 0M 43.30127019 -25 L 25 -43.30127019 L 0 0M 25 -43.30127019 L 0 -50 L 0 0M 0 -50 L -25 -43.30127019 L 0 0M -25 -43.30127019 L -43.30127019 -25 L 0 0M -43.30127019 -25 L -50 0 L 0 0M -50 0 L -43.30127019 25 L 0 0M -43.30127019 25 L -25 43.30127019 L 0 0M -25 43.30127019 L 0 50 L 0 0" transform="translate(130, 445)" fill="transparent" stroke="black"/>
+            </g>
+            
+        </defs>
+        
+        <use xlink:href="#object" />
+        
+        </defs>
+    </svg>
+
+</body>
+
+<script>
+    const corners = 12;
+    const radius = 50;
+    let pathString = "M 0 0 ";
+    let points = Array.from(Array(corners), () => new Array(2));
+
+    for (let i = 0; i < corners; i++) {
+        points[i][0] = radius * Math.sin(Math.PI / (corners / 2) * i);
+        points[i][1] = radius * Math.cos(Math.PI / (corners / 2) * i);
+        points[i][0] = Number(points[i][0].toFixed(8));
+        points[i][1] = Number(points[i][1].toFixed(8));
+    }
+    
+    const getPathString = p => {
+        let pathString = "";
+        for (let i = 0; i < p.length - 1; i++) {
+            const c = p[i];
+            const n = p[i + 1];
+            pathString += `M ${c[0]} ${c[1]} L ${n[0]} ${n[1]} L 0 0`;
+        }
+        const f = p[0];
+        const l = p[p.length - 1];
+        pathString += `M ${l[0]} ${l[1]} L ${f[0]} ${f[1]} L 0 0`
+        return pathString;
+    }
+    
+    console.log(getPathString(points));
+    
+</script>
+
+</html>
