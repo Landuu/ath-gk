@@ -13,14 +13,23 @@
         height="600" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid" style="background: #eeeeee">
         <defs>
             <g id="object">
-                <rect x="120" y="390" width="360" height="25" transform="translate(-100, 90) rotate(-15)" fill="red" />
-                <polygon points="270,600 300,400 330, 600" fill="purple" />
-                <path d="M 0 50 L 25 43.30127019 L 0 0M 25 43.30127019 L 43.30127019 25 L 0 0M 43.30127019 25 L 50 0 L 0 0M 50 0 L 43.30127019 -25 L 0 0M 43.30127019 -25 L 25 -43.30127019 L 0 0M 25 -43.30127019 L 0 -50 L 0 0M 0 -50 L -25 -43.30127019 L 0 0M -25 -43.30127019 L -43.30127019 -25 L 0 0M -43.30127019 -25 L -50 0 L 0 0M -50 0 L -43.30127019 25 L 0 0M -43.30127019 25 L -25 43.30127019 L 0 0M -25 43.30127019 L 0 50 L 0 0" transform="translate(130, 445)" fill="transparent" stroke="black"/>
+                
+                <path id="p1" fill="transparent" stroke="black">
+                    <animateTransform attributeName="transform" type="rotate" from = "0 160 358" to = "360 160 358" dur="10s" repeatCount="indefinite" /> 
+                </path>
+
+                <path id="p2" fill="transparent" stroke="black">
+                    <animateTransform attributeName="transform" type="rotate" from = "0 442 434" to = "360 442 434" dur="10s" repeatCount="indefinite" /> 
+                </path>
+                <rect x="120" y="390" width="320" height="25" transform="translate(135, -65) rotate(15)" fill="red" />
+                <polygon points="270,600 300,400 330, 600" />
             </g>
             
         </defs>
         
-        <use xlink:href="#object" />
+        <use xlink:href="#object" fill="blue" transform="translate(40, 0)"/>
+        <use xlink:href="#object" fill="purple" transform="translate(-56, -145) scale(0.7, 0.7)" />
+        <use xlink:href="#object" fill="green" transform="translate(335, -130) scale(0.5, 0.5)" />
         
         </defs>
     </svg>
@@ -28,33 +37,54 @@
 </body>
 
 <script>
-    const corners = 12;
-    const radius = 50;
-    let pathString = "M 0 0 ";
-    let points = Array.from(Array(corners), () => new Array(2));
+    // This is used to generate a path string for the SVG
+    const getPathPoints = (corners, radius, center) => {
+        let pathString = `M ${center.x} ${center.y} `;
+        let points = Array.from(Array(corners), () => new Array(2));
 
-    for (let i = 0; i < corners; i++) {
-        points[i][0] = radius * Math.sin(Math.PI / (corners / 2) * i);
-        points[i][1] = radius * Math.cos(Math.PI / (corners / 2) * i);
-        points[i][0] = Number(points[i][0].toFixed(8));
-        points[i][1] = Number(points[i][1].toFixed(8));
+        for (let i = 0; i < corners; i++) {
+            points[i][0] = radius * Math.sin(Math.PI / (corners / 2) * i) + center.x;
+            points[i][1] = radius * Math.cos(Math.PI / (corners / 2) * i) + center.y;
+            points[i][0] = Number(points[i][0].toFixed(8));
+            points[i][1] = Number(points[i][1].toFixed(8));
+        }
+        return points;
     }
     
-    const getPathString = p => {
+    const getPathString = (points, center) => {
         let pathString = "";
-        for (let i = 0; i < p.length - 1; i++) {
-            const c = p[i];
-            const n = p[i + 1];
-            pathString += `M ${c[0]} ${c[1]} L ${n[0]} ${n[1]} L 0 0`;
+        for (let i = 0; i < points.length - 1; i++) {
+            const c = points[i];
+            const n = points[i + 1];
+            pathString += `M ${c[0]} ${c[1]} L ${n[0]} ${n[1]} L ${center.x} ${center.y}`;
         }
-        const f = p[0];
-        const l = p[p.length - 1];
-        pathString += `M ${l[0]} ${l[1]} L ${f[0]} ${f[1]} L 0 0`
+        const f = points[0];
+        const l = points[points.length - 1];
+        pathString += `M ${l[0]} ${l[1]} L ${f[0]} ${f[1]} L ${center.x} ${center.y}`
         return pathString;
     }
+
+    const corners = 12;
+    const radius = 70;
+    const center1 = {
+        x: 160,
+        y: 358
+    };
+    const center2 = {
+        x: 442,
+        y: 434
+    };
+
+    const points1 = getPathPoints(corners, radius, center1);
+    const points2 = getPathPoints(corners, radius, center2);
+    const path1 = getPathString(points1, center1);
+    const path2 = getPathString(points2, center2);
     
-    console.log(getPathString(points));
-    
+    document.getElementById("p1").setAttribute("d", path1);
+    document.getElementById("p2").setAttribute("d", path2);
+
+    console.log("path1", path1);
+    console.log("path2", path2);
 </script>
 
 </html>
