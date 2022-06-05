@@ -130,10 +130,10 @@ public class Lab6 extends GLJPanel implements GLEventListener  {
 		// TODO configure better lighting!
 		float[] ambientLevel = { 0.77f, 0.77f, 0.77f, 1f };
 		gl2.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT,ambientLevel, 0);
-		gl2.glLightModeli(GL2.GL_LIGHT_MODEL_AMBIENT, 1);
+		gl2.glLightModeli(GL2.GL_LIGHT_MODEL_AMBIENT, GL.GL_TRUE);
 	}
 
-	public void drawObject(GL2 gl2, int corners){
+	public void drawObject(GL2 gl2, int corners) {
 		double radius = 5.5;
 		double angle = 0;
 		double angleIncrement = 2 * Math.PI / corners;
@@ -158,7 +158,6 @@ public class Lab6 extends GLJPanel implements GLEventListener  {
 
 			gl2.glEnd();
 		}
-
 	}
 
 
