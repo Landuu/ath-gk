@@ -26,7 +26,7 @@ class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 		window.setContentPane(panel);
 		window.pack();
 		window.setResizable(false);
-		window.setLocation(2000,50);
+		window.setLocation(100,50);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
@@ -97,20 +97,20 @@ class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 		gl2.glBegin(gl2.GL_TRIANGLE_FAN);
 		gl2.glVertex3f(0, topHeight,0);
 		gl2.glVertex3f(0, bottomHeight,0);
-		for ( int i = 0; i<corners;i++) {
-			gl2.glVertex3f((float) (Math.cos(i*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin(i*2*Math.PI/corners)*radius));
+		for (int i = 0; i < corners; i++) {
+			gl2.glVertex3f((float) (Math.cos(i * 2 * Math.PI / corners) * radius), bottomHeight, (float) (Math.sin(i * 2 * Math.PI / corners) * radius));
 			gl2.glColor3fv(c1, 0);
-			gl2.glVertex3f((float) (Math.cos((i+1)*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin((i+1)*2*Math.PI/corners)*radius));
+			gl2.glVertex3f((float) (Math.cos((i+1)*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin((i + 1) * 2 * Math.PI / corners) * radius));
 			gl2.glColor3fv(c2, 0);
 		}
 		gl2.glEnd();
 
 		gl2.glBegin(gl2.GL_POLYGON);
 		gl2.glVertex3f(0,bottomHeight,0);
-		for (int i=0; i<corners;i++) {
-			gl2.glVertex3f((float) (Math.cos(i*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin(i*2*Math.PI/corners)*radius));
+		for (int i = 0; i < corners; i++) {
+			gl2.glVertex3f((float) (Math.cos(i*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin(i * 2 * Math.PI / corners) * radius));
 			gl2.glColor3fv(c1, 0);
-			gl2.glVertex3f((float) (Math.cos((i+1)*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin((i+1)*2*Math.PI/corners)*radius));
+			gl2.glVertex3f((float) (Math.cos((i+1)*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin((i + 1) * 2 * Math.PI / corners) * radius));
 			gl2.glColor3fv(c2, 0);
 		}
 		gl2.glEnd();
