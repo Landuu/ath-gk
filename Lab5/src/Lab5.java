@@ -1,8 +1,10 @@
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.*;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
@@ -11,7 +13,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
  * select the object.  The space bar toggles the use of anaglyph
  * stereo.
  */
-public class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
+class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 
 	/**
 	 * A main routine to create and show a window that contains a
@@ -24,7 +26,7 @@ public class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 		window.setContentPane(panel);
 		window.pack();
 		window.setResizable(false);
-		window.setLocation(50,50);
+		window.setLocation(2000,50);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
@@ -54,6 +56,12 @@ public class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 
 	private GLUT glut = new GLUT(); // An object for drawing GLUT shapes.
 
+	/*--------------variable---------------------*/
+	private GLU glu = new GLU();
+	private double radius = 5;
+	private double angle = 0;
+	private float x=0,z=0;
+	/*--------------variable---------------------*/
 
 	/**
 	 * The method that draws the current object, with its modeling transformation.
@@ -67,9 +75,98 @@ public class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 		// TODO: Draw the currently selected object, number 1, 2, 3, 4, 5, or 6.
 		// (Objects should lie in the cube with x, y, and z coordinates in the
 		// range -5 to 5.)
-
+		if (objectNumber == 1) {
+			// spirala
+			drawSpiral(gl2);
+		}
+		else if (objectNumber == 2) {
+			// piramida
+			drawPyramid(gl2);
+		}
 
 	}
+
+	public void drawPyramid(GL2 gl2){
+		double radius = 3;
+		int corners = 12;
+		float[] c1 = {1.0f, 1.0f, 1.0f};
+		float[] c2 = {0.8f, 0.8f, 0.8f};
+		float topHeight = 4;
+		float bottomHeight = -3;
+
+		gl2.glBegin(gl2.GL_TRIANGLE_FAN);
+		gl2.glVertex3f(0, topHeight,0);
+		gl2.glVertex3f(0, bottomHeight,0);
+		for ( int i = 0; i<corners;i++) {
+			gl2.glVertex3f((float) (Math.cos(i*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin(i*2*Math.PI/corners)*radius));
+			gl2.glColor3fv(c1, 0);
+			gl2.glVertex3f((float) (Math.cos((i+1)*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin((i+1)*2*Math.PI/corners)*radius));
+			gl2.glColor3fv(c2, 0);
+		}
+		gl2.glEnd();
+
+		gl2.glBegin(gl2.GL_POLYGON);
+		gl2.glVertex3f(0,bottomHeight,0);
+		for (int i=0; i<corners;i++) {
+			gl2.glVertex3f((float) (Math.cos(i*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin(i*2*Math.PI/corners)*radius));
+			gl2.glColor3fv(c1, 0);
+			gl2.glVertex3f((float) (Math.cos((i+1)*2*Math.PI/corners)*radius), bottomHeight, (float) (Math.sin((i+1)*2*Math.PI/corners)*radius));
+			gl2.glColor3fv(c2, 0);
+		}
+		gl2.glEnd();
+	}
+
+	public void drawSpiral(GL2 gl2){
+		gl2.glClear(GL2.GL_COLOR_BUFFER_BIT);
+		gl2.glEnable(GL2.GL_POINT_SMOOTH);
+		gl2.glColor3f(1f, 1f, 1f);
+
+		float corners = 20;
+		float radius = 2;
+		float uplift = -6;
+		float pointSize = 1;
+		int spins = 12;
+
+		for(int j = 0; j < spins; j++) {
+			for(int i = 1; i <= corners; i++) {
+				float x = (float) (radius * Math.sin(Math.PI / (corners / 2) * i));
+				float y = (float) (radius * Math.cos(Math.PI / (corners / 2) * i));
+				gl2.glPointSize(pointSize);
+				gl2.glBegin(GL.GL_POINTS);
+				gl2.glVertex3f(x, uplift, y);
+				gl2.glEnd();
+
+				uplift += 0.05;
+				pointSize += 0.04;
+			}
+		}
+	}
+
+	public void Polygon(GL2 gl2,int numVertices){
+		gl2.glClear(GL2.GL_COLOR_BUFFER_BIT);
+		gl2.glBegin(GL2.GL_POLYGON);
+		double angleIncrement = 2 * Math.PI / numVertices;
+		for (int i = 1; i <= numVertices; i++) {
+			x = (float) (radius * Math.cos(angle));
+			z = (float) (radius * Math.sin(angle));
+			gl2.glVertex3f(x, -2.0f, z);
+			angle = i * angleIncrement;
+		}
+		gl2.glEnd();
+	}
+
+	public void Triangle(GL2 gl2){
+		gl2.glBegin(  GL2.GL_TRIANGLES );
+		gl2.glColor3f( 0.0f, 0.0f, 1.0f ); // Blue
+		gl2.glVertex3f( -1.45f, -2.0f, 0.0f );
+		gl2.glColor3f( 0.0f, -1.3f, 0.0f );  // Green
+		gl2.glVertex3f( 0.0f, 5.0f, -4.85f );
+		gl2.glColor3f( 1.0f, 0.65f, 0.80f );  // Purple
+		gl2.glVertex3f( 1.45f, -2.0f, 0.0f );
+		gl2.glEnd();
+	}
+
+
 
 	//-------------------- Draw the Scene  -------------------------
 
@@ -79,7 +176,6 @@ public class Lab5 extends GLJPanel implements GLEventListener, KeyListener{
 	 * method when the user hits a key that modifies the scene.
 	 */
 	public void display(GLAutoDrawable drawable) {
-
 		GL2 gl2 = drawable.getGL().getGL2(); // The object that contains all the OpenGL methods.
 
 		if (useAnaglyph) {
