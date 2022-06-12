@@ -30,7 +30,7 @@ public class Lab6 extends GLJPanel implements GLEventListener  {
 		window.setContentPane(panel);
 		window.pack();
 		window.setResizable(false);
-		window.setLocation(2050,50);
+		window.setLocation(100,50);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
